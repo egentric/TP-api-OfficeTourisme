@@ -16,9 +16,9 @@ class ItemController extends Controller
     {
         // On récupère tous les éléments de la table article
         $items = DB::table('items')
-            ->join('users', 'user_id', '=', 'items.user_id')
+            ->join('users', 'users.id', '=', 'items.user_id')
             ->select('items.*', 'users.firstName as firstName', 'users.lastname as lastname')
-
+            // ->distinct()
             ->get()
             ->toArray();
         // On retourne les informations de la table article en JSON
@@ -80,6 +80,14 @@ class ItemController extends Controller
      */
     public function show(Item $item)
     {
+        // On récupère tous les éléments de la table article
+        $item = DB::table('items')
+            ->join('users', 'users.id', '=', 'items.user_id')
+            ->select('items.*', 'users.firstName as firstName', 'users.lastname as lastname')
+            // ->distinct()
+            ->get();
+        // ->toArray()
+
         // On retourne les informations de l'article en JSON
         return response()->json($item);
     }

@@ -107,6 +107,18 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
+        // On récupère tous les éléments de la table évenement
+        $event = DB::table('events')
+            // On y join la table event_site
+            ->leftjoin('event_site', 'event_site.event_id', '=', 'events.id')
+            // On y join la table sites
+            ->leftjoin('sites', 'sites.id', '=', 'event_site.site_id')
+            // On sélectionne les colonnes du site et on les renommes
+            ->select('events.*', 'sites.nameSite as nameSite', 'sites.emailSite as emailSite', 'sites.websiteSite as websiteSite', 'sites.phoneSite as phoneSite')
+            ->where('events.id', $event->id)
+            ->get();
+        // ->toArray()
+
         // On retourne les informations de l'évenement en JSON
         return response()->json($event);
     }
@@ -161,7 +173,7 @@ class EventController extends Controller
         // // table pivot event_site // //
 
         // récupèration des identifiants des modèles Site à partir de la requête HTTP : $eventSitesIds= $request->site_id;.
-        $eventSitesIds[] = $request->site_id;
+        $eventSitesIds = $request->site_id;
         // on vérifie que le tableau $eventSitesIds n'est pas vide,
         if (!empty($eventSitesIds)) {
             // puis pour chaque identifiant dans le tableau, on récupère le modèle Site correspondant en utilisant la méthode find() 

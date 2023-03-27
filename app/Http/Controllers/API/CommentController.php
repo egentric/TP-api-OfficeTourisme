@@ -16,10 +16,10 @@ class CommentController extends Controller
     {
         // On récupère tous les éléments de la table commentaire
         $comments = DB::table('comments')
-            ->join('users', 'user_id', '=', 'comments.user_id')
-            ->join('items', 'item_id', '=', 'comments.item_id')
-            ->select('comments.*', 'users.firstName as firstName', 'users.lastname as lastname')
-
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->join('items', 'items.id', '=', 'comments.item_id')
+            ->select('comments.id', 'comments.titleComment', 'comments.contentComment', 'comments.created_at', 'comments.updated_at', 'users.firstName as firstName', 'users.lastname as lastname')
+            // ->distinct()
             ->get()
             ->toArray();
         // On retourne les informations de la table commentaire en JSON
@@ -58,6 +58,14 @@ class CommentController extends Controller
      */
     public function show(Comment $comment)
     {
+        $comment = DB::table('comments')
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->join('items', 'items.id', '=', 'comments.item_id')
+            ->select('comments.id', 'comments.titleComment', 'comments.contentComment', 'comments.created_at', 'comments.updated_at', 'users.firstName as firstName', 'users.lastname as lastname')
+            ->where('comments.id', $comment->id)
+            // ->distinct()
+            ->get();
+
         // On retourne les informations du commentaire en JSON
         return response()->json($comment);
     }
