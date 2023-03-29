@@ -18,7 +18,7 @@ class CommentController extends Controller
         $comments = DB::table('comments')
             ->join('users', 'users.id', '=', 'comments.user_id')
             ->join('items', 'items.id', '=', 'comments.item_id')
-            ->select('comments.id', 'comments.titleComment', 'comments.contentComment', 'comments.created_at', 'comments.updated_at', 'users.firstName as firstName', 'users.lastname as lastname')
+            ->select('comments.id', 'comments.titleComment', 'comments.contentComment', 'comments.created_at', 'comments.updated_at', 'users.firstName as firstName', 'users.lastName as lastName', 'items.titleItem as titleItem')
             // ->distinct()
             ->get()
             ->toArray();
@@ -61,7 +61,7 @@ class CommentController extends Controller
         $comment = DB::table('comments')
             ->join('users', 'users.id', '=', 'comments.user_id')
             ->join('items', 'items.id', '=', 'comments.item_id')
-            ->select('comments.id', 'comments.titleComment', 'comments.contentComment', 'comments.created_at', 'comments.updated_at', 'users.firstName as firstName', 'users.lastname as lastname')
+            ->select('comments.id', 'comments.titleComment', 'comments.contentComment', 'comments.created_at', 'comments.updated_at', 'users.firstName as firstName', 'users.lastName as lastName', 'items.titleItem as titleItem')
             ->where('comments.id', $comment->id)
             // ->distinct()
             ->get();

@@ -17,7 +17,7 @@ class ItemController extends Controller
         // On récupère tous les éléments de la table article
         $items = DB::table('items')
             ->join('users', 'users.id', '=', 'items.user_id')
-            ->select('items.*', 'users.firstName as firstName', 'users.lastname as lastname')
+            ->select('items.*', 'users.firstName as firstName', 'users.lastName as lastName')
             // ->distinct()
             ->get()
             ->toArray();
@@ -54,7 +54,7 @@ class ItemController extends Controller
             $filename = $filenameWithoutExt . '_' . time() . '.' . $extension;
 
             // On enregistre le fichier à la racine /storage/app/public/uploads, ici la méthode storeAs défini déjà le chemin /storage/app
-            $path = $request->file('pictureItem')->storeAs('public/uploads/items', $filename);
+            $path = $request->file('pictureItem')->storeAs('public/storage/uploads/items', $filename);
         } else {
             $filename = Null;
         }
@@ -83,7 +83,8 @@ class ItemController extends Controller
         // On récupère tous les éléments de la table article
         $item = DB::table('items')
             ->join('users', 'users.id', '=', 'items.user_id')
-            ->select('items.*', 'users.firstName as firstName', 'users.lastname as lastname')
+            ->select('items.*', 'users.firstName as firstName', 'users.lastName as lastName')
+            ->where('items.id', $item->id)
             // ->distinct()
             ->get();
         // ->toArray()
@@ -119,10 +120,10 @@ class ItemController extends Controller
             $filename = $filenameWithoutExt . '_' . time() . '.' . $extension;
 
             // On enregistre le fichier à la racine /storage/app/public/uploads, ici la méthode storeAs défini déjà le chemin /storage/app
-            $path = $request->file('pictureItem')->storeAs('public/uploads/items', $filename);
+            $path = $request->file('pictureItem')->storeAs('public/storage/uploads/items', $filename);
         }
         // else {
-        //     $filename = Null;
+        //     $request('pictureItem') = $filename;
         // }
 
 

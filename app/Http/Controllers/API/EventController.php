@@ -18,11 +18,11 @@ class EventController extends Controller
         // On récupère tous les éléments de la table évenement
         $events = DB::table('events')
             // On y join la table event_site
-            ->join('event_site', 'event_site.event_id', '=', 'events.id')
+            // ->leftjoin('event_site', 'event_site.event_id', '=', 'events.id')
             // On y join la table sites
-            ->join('sites', 'sites.id', '=', 'event_site.site_id')
+            // ->leftjoin('sites', 'sites.id', '=', 'event_site.site_id')
             // On sélectionne les colonnes du site et on les renommes
-            ->select('events.*', 'sites.nameSite as nameSite', 'sites.emailSite as emailSite', 'sites.websiteSite as websiteSite', 'sites.phoneSite as phoneSite')
+            // ->select('events.*', 'sites.nameSite as nameSite', 'sites.emailSite as emailSite', 'sites.websiteSite as websiteSite', 'sites.phoneSite as phoneSite')
 
             ->get()
             ->toArray();

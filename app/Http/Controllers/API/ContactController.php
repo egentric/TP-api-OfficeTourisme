@@ -53,7 +53,13 @@ class ContactController extends Controller
      */
     public function show(Contact $contact)
     {
-        // On retourne les informations du contact en JSON
+        // On récupère tous les éléments de la table contact
+        $contact = DB::table('contacts')
+            ->where('contacts.id', $contact->id)
+
+            ->get()
+            ->toArray();
+        // On retourne les informations de la table contact en JSON
         return response()->json($contact);
     }
 

@@ -10,7 +10,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Site extends Model
 {
     use HasFactory;
-    protected $fillable = ['nameSite', 'descriptionSite', 'emailSite', 'websiteSite', 'phoneSite', 'zipSite', 'citySite', 'longitudeDegSite', 'latitudeDegSite', 'pictureSite', 'user_id', 'type_id'];
+    protected $fillable = ['nameSite', 'descriptionSite', 'emailSite', 'websiteSite', 'phoneSite', 'addressSite', 'zipSite', 'citySite', 'longitudeDegSite', 'latitudeDegSite', 'pictureSite', 'user_id', 'type_id'];
 
     public function user()
     {
