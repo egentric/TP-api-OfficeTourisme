@@ -110,7 +110,7 @@ class EventController extends Controller
     {
         // On récupère tous les éléments de la table évenement et de la table sites
 
-        $event = Event::with("site")->where('events.id', $event->id)->get();
+        $event = Event::with("site")->where('events.id', $event->id)->first();
 
         // On retourne les informations de l'évenement en JSON
         return response()->json($event);
