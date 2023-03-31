@@ -15,12 +15,15 @@ class SiteController extends Controller
     public function index()
     {
         // On récupère tous les éléments de la table site
-        $sites = DB::table('sites')
-            ->join('users', 'user_id', '=', 'sites.user_id')
-            ->join('types', 'type_id', '=', 'sites.type_id')
+        // $sites = DB::table('sites')
+        //     ->join('users', 'user_id', '=', 'sites.user_id')
+        //     ->join('types', 'type_id', '=', 'sites.type_id')
+        //     ->get()
+        //     ->toArray();
 
-            ->get()
-            ->toArray();
+        $sites = Site::with("type", "event")
+            ->get();
+
         // On retourne les informations de la table site en JSON
         return response()->json([
             'status' => 'Success',
@@ -96,6 +99,16 @@ class SiteController extends Controller
      */
     public function show(Site $site)
     {
+        // On récupère tous les éléments de la table article
+        $site = DB::table('sites')
+            ->join('users', 'users.id', '=', 'sites.user_id')
+            ->join('types', 'types.id', '=', 'sites.type_id')
+            ->select('sites.*', 'users.firstName as firstName', 'users.lastName as lastName', 'types.nameType as nameType')
+            ->where('sites.id', $site->id)
+            // ->distinct()
+            ->get();
+        // ->toArray()
+
         // On retourne les informations du site en JSON
         return response()->json($site);
     }

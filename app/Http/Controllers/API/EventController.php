@@ -33,6 +33,7 @@ class EventController extends Controller
         ]);
     }
 
+
     /**
      * Store a newly created resource in storage.
      */
@@ -107,21 +108,34 @@ class EventController extends Controller
      */
     public function show(Event $event)
     {
-        // On récupère tous les éléments de la table évenement
+        // On récupère tous les éléments de la table évenement et de la table sites
+
+        $event = Event::with("site")->where('events.id', $event->id)->get();
+
+        // On retourne les informations de l'évenement en JSON
+        return response()->json($event);
+    }
+
+
+    public function showSimple(Event $event)
+    {
+        // On récupère tous les éléments de la table évenement et de la table sites
         $event = DB::table('events')
             // On y join la table event_site
             ->leftjoin('event_site', 'event_site.event_id', '=', 'events.id')
             // On y join la table sites
             ->leftjoin('sites', 'sites.id', '=', 'event_site.site_id')
             // On sélectionne les colonnes du site et on les renommes
-            ->select('events.*', 'sites.nameSite as nameSite', 'sites.emailSite as emailSite', 'sites.websiteSite as websiteSite', 'sites.phoneSite as phoneSite')
+            ->select('events.*', 'site_id')
             ->where('events.id', $event->id)
-            ->get();
-        // ->toArray()
+            ->get()
+            ->toArray();
+
 
         // On retourne les informations de l'évenement en JSON
         return response()->json($event);
     }
+
 
     /**
      * Update the specified resource in storage.

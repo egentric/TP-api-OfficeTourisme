@@ -54,7 +54,7 @@ class ItemController extends Controller
             $filename = $filenameWithoutExt . '_' . time() . '.' . $extension;
 
             // On enregistre le fichier à la racine /storage/app/public/uploads, ici la méthode storeAs défini déjà le chemin /storage/app
-            $path = $request->file('pictureItem')->storeAs('public/storage/uploads/items', $filename);
+            $path = $request->file('pictureItem')->storeAs('public/uploads/items', $filename);
         } else {
             $filename = Null;
         }
@@ -120,7 +120,7 @@ class ItemController extends Controller
             $filename = $filenameWithoutExt . '_' . time() . '.' . $extension;
 
             // On enregistre le fichier à la racine /storage/app/public/uploads, ici la méthode storeAs défini déjà le chemin /storage/app
-            $path = $request->file('pictureItem')->storeAs('public/storage/uploads/items', $filename);
+            $path = $request->file('pictureItem')->storeAs('public/uploads/items', $filename);
         }
         // else {
         //     $request('pictureItem') = $filename;
