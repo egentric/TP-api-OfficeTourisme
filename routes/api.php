@@ -57,7 +57,6 @@ Route::controller(EventController::class)->group(function () {
     Route::get('events', 'index');
     Route::post('events', 'store');
     Route::get('events/{event}', 'show');
-    Route::get('eventsimple/{event}', 'showSimple');
     Route::post('events/{event}', 'update');
     Route::delete('events/{event}', 'destroy');
 });

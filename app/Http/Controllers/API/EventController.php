@@ -74,27 +74,21 @@ class EventController extends Controller
             'contentEvent' => $request->contentEvent,
         ]);
 
-        // // table pivot event_site // //
+        // // ====================table pivot event_site====================== // //
 
-        // Cette ligne de code ajoute l'ID du site envoyé dans la requête dans un tableau $eventSitesIds.
-        // Cela vous permettra de récupérer tous les ID des sites sélectionnés pour le producteur       
+
+        // récupèration des identifiants des modèles Site à partir de la requête HTTP : $eventSitesIds= $request->site_id;.
         $eventSitesIds[] = $request->site_id;
-        // Cette condition vérifie si le tableau $eventSitesIds n'est pas vide avant de poursuivre le traitement.
-        //  Cela permet d'éviter d'exécuter le code inutilement si aucun site n'a été envoyé dans la requête.        
+        // on vérifie que le tableau $eventSitesIds n'est pas vide,
         if (!empty($eventSitesIds)) {
-            // Cette boucle foreach itère sur chaque ID de site présent dans le tableau $eventSitesIds.
-            foreach ($eventSitesIds as $siteId) {
-                // Cette ligne de code récupère le modèle site correspondant à l'ID du site de la boucle en utilisant la méthode find().
-                //  Cette méthode recherche un enregistrement dans la table sites qui a l'ID spécifié et renvoie un objet site correspondant.
-                $site = Event::find($siteId);
-                // Cette ligne de code utilise la méthode attach() sur la relation ManyToMany entre Event et Site pour ajouter le site
-                //  récupéré précédemment à l'event que vous voulez mettre à jour.
+            // puis pour chaque identifiant dans le tableau, on récupère le modèle Site correspondant en utilisant la méthode find() 
+            for ($i = 0; $i < count($eventSitesIds); $i++) {
+                $site = Site::find($eventSitesIds[$i]);
+                //  et on attache à l'événement en utilisant la méthode attach().
                 $event->site()->attach($site);
             }
+            // En résumé, ce code attache un ou plusieurs sites à un événement en utilisant leurs identifiants respectifs.
         }
-
-
-
 
         // On retourne les informations du nouveau évenement en JSON
         return response()->json([
@@ -116,25 +110,6 @@ class EventController extends Controller
         return response()->json($event);
     }
 
-
-    public function showSimple(Event $event)
-    {
-        // On récupère tous les éléments de la table évenement et de la table sites
-        $event = DB::table('events')
-            // On y join la table event_site
-            ->leftjoin('event_site', 'event_site.event_id', '=', 'events.id')
-            // On y join la table sites
-            ->leftjoin('sites', 'sites.id', '=', 'event_site.site_id')
-            // On sélectionne les colonnes du site et on les renommes
-            ->select('events.*', 'site_id')
-            ->where('events.id', $event->id)
-            ->get()
-            ->toArray();
-
-
-        // On retourne les informations de l'évenement en JSON
-        return response()->json($event);
-    }
 
 
     /**
@@ -167,7 +142,7 @@ class EventController extends Controller
             $request->file('pictureEvent')->storeAs('public/uploads/events', $filename);
         }
         // else {
-        //     $filename = Null;
+        //     $filename = $event->pictureEvent;
         // }
 
 
