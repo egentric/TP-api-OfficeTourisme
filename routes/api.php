@@ -4,13 +4,14 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\UserController;
+use App\Http\Controllers\API\UserController;
 use App\Http\Controllers\API\ItemController;
 use App\Http\Controllers\API\SiteController;
 use App\Http\Controllers\API\TypeController;
 use App\Http\Controllers\API\EventController;
 use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\ContactController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -31,6 +32,13 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('register', 'register');
     //     Route::post('logout', 'logout');
     //     Route::post('refresh', 'refresh');
+});
+Route::controller(UserController::class)->group(function () {
+    Route::get('users', 'index');
+    // Route::post('users', 'store');
+    Route::get('users/{user}', 'show');
+    Route::post('users/{user}', 'update');
+    Route::delete('users/{user}', 'destroy');
 });
 
 
