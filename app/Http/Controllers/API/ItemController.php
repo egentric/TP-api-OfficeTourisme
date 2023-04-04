@@ -78,20 +78,49 @@ class ItemController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Item $item)
+    // public function show($id)
+    // {
+    //     // On récupère tous les éléments de la table article
+    //     $item = DB::table('items')
+    //         ->join('users', 'users.id', '=', 'items.user_id')
+    //         ->select('items.*', 'users.firstName as firstName', 'users.lastName as lastName')
+    //         ->where('items.id', $item->id)
+    //         // ->distinct()
+    //         ->get();
+    //     // ->toArray()
+
+    //     // On retourne les informations de l'article en JSON
+    //     return response()->json($item);
+    // }
+    public function show($id)
     {
-        // On récupère tous les éléments de la table article
         $item = DB::table('items')
             ->join('users', 'users.id', '=', 'items.user_id')
             ->select('items.*', 'users.firstName as firstName', 'users.lastName as lastName')
-            ->where('items.id', $item->id)
-            // ->distinct()
-            ->get();
-        // ->toArray()
+            ->where('items.id', '=', $id)
+            ->first();
 
-        // On retourne les informations de l'article en JSON
-        return response()->json($item);
+        if (!$item) {
+            return response()->json([
+                'status' => 'Error',
+                'message' => 'Item not found'
+            ], 404);
+        }
+
+        $comments = DB::table('comments')
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->select('comments.*', 'users.firstName as firstName', 'users.lastName as lastName')
+            ->where('comments.item_id', '=', $id)
+            ->get()
+            ->toArray();
+
+        return response()->json([
+            'status' => 'Success',
+            'item' => $item,
+            'comments' => $comments,
+        ]);
     }
+
 
     /**
      * Update the specified resource in storage.
@@ -102,7 +131,7 @@ class ItemController extends Controller
             'titleItem' => 'required|max:100',
             'subtitleItem' => 'required|max:255',
             'contentItem' => 'required',
-            'pictureItem' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg'
+            // 'pictureItem' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg'
 
         ]);
 
@@ -121,10 +150,9 @@ class ItemController extends Controller
 
             // On enregistre le fichier à la racine /storage/app/public/uploads, ici la méthode storeAs défini déjà le chemin /storage/app
             $path = $request->file('pictureItem')->storeAs('public/uploads/items', $filename);
+        } else {
+            $filename = $item->pictureItem;
         }
-        // else {
-        //     $request('pictureItem') = $filename;
-        // }
 
 
         // On modifie l'article
