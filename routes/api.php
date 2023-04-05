@@ -49,6 +49,7 @@ Route::controller(SiteController::class)->group(function () {
     Route::get('sites/{site}', 'show');
     Route::post('sites/{site}', 'update');
     Route::delete('sites/{site}', 'destroy');
+    Route::get('sites/type/{type}', 'showSiteType');
 });
 
 // Route::apiResource("types", TypeController::class);

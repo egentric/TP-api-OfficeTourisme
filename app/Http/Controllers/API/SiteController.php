@@ -6,6 +6,7 @@ use App\Models\Site;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use App\Http\Controllers\Controller;
+use App\Models\Type;
 
 class SiteController extends Controller
 {
@@ -113,6 +114,21 @@ class SiteController extends Controller
         return response()->json($site);
     }
 
+    public function showSiteType(Type $type)
+    {
+        // On récupère tous les éléments de la table article
+        $sites = DB::table('sites')
+            ->join('types', 'types.id', '=', 'sites.type_id')
+            ->select('sites.*', 'types.nameType as nameType')
+            ->where('types.id', $type->id)
+            // ->distinct()
+            ->get();
+        // ->toArray()
+
+        // On retourne les informations du site en JSON
+        return response()->json($sites);
+    }
+
     /**
      * Update the specified resource in storage.
      */
@@ -129,7 +145,7 @@ class SiteController extends Controller
             'citySite' => 'required|max:100',
             'longitudeDegSite' => 'required|max:100',
             'latitudeDegSite' => 'required|max:100',
-            'pictureSite' => 'sometimes|image|mimes:jpeg,png,jpg,gif,svg'
+
 
         ]);
 
@@ -148,10 +164,9 @@ class SiteController extends Controller
 
             // On enregistre le fichier à la racine /storage/app/public/uploads, ici la méthode storeAs défini déjà le chemin /storage/app
             $request->file('pictureSite')->storeAs('public/uploads/sites', $filename);
+        } else {
+            $filename = $site->pictureSite;
         }
-        // else {
-        //     $filename = Null;
-        // }
 
 
         // On modifie le site
