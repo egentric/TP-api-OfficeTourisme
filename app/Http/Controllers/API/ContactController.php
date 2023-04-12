@@ -41,11 +41,14 @@ class ContactController extends Controller
             'topic' => $request->topic,
             'content' => $request->content,
         ]);
-        // On retourne les informations du nouveau contact en JSON
-        return response()->json([
-            'status' => 'Success',
-            'data' => $contact,
-        ]);
+
+        return redirect('/home')->with('success', 'Message envoyé avec succès');
+
+        // // On retourne les informations du nouveau contact en JSON
+        // return response()->json([
+        //     'status' => 'Success',
+        //     'data' => $contact,
+        // ]);
     }
 
     /**

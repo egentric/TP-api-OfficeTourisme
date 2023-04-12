@@ -23,8 +23,6 @@ return new class extends Migration
             $table->string('longitudeDegSite');
             $table->string('latitudeDegSite');
             $table->string('pictureSite');
-            $table->rememberToken();
-
             $table->timestamps();
         });
     }

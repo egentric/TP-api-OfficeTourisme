@@ -21,6 +21,7 @@ class ItemController extends Controller
             // ->distinct()
             ->get()
             ->toArray();
+        // dd($items);
         // On retourne les informations de la table article en JSON
         return response()->json([
             'status' => 'Success',

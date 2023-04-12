@@ -15,6 +15,9 @@ class UserController extends Controller
     public function index()
     {
         $users = DB::table('users')
+            ->join('roles', 'roles.id', '=', 'users.role_id')
+            ->select('users.*', 'roles.nameRole as role')
+
             ->get()
             ->toArray();
         return response()->json([
@@ -34,10 +37,18 @@ class UserController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(User $user)
+    public function show($id)
     {
-        // On retourne les informations du type en JSON
-        return response()->json($user);
+        $users = DB::table('users')
+            ->join('roles', 'roles.id', '=', 'users.role_id')
+            ->select('users.*', 'roles.nameRole as role')
+            ->where('users.id', '=', $id)
+            ->first();
+
+        return response()->json([
+            'status' => 'Success',
+            'data' => $users,
+        ]);
     }
 
     /**
@@ -49,14 +60,14 @@ class UserController extends Controller
             'firstName' => 'required|max:40',
             'lastName' => 'required|max:40',
             'email' => 'required|string',
-            'role' => 'required|max:15',
+            'role_id' => 'required|max:15',
         ]);
         // On modifie le type
         $user->update([
             $user->firstName = $request->input('firstName'),
             $user->lastName = $request->input('lastName'),
             $user->email = $request->input('email'),
-            $user->role = $request->input('role'),
+            $user->role_id = $request->input('role_id'),
         ]);
 
         // On retourne les informations du type en JSON
