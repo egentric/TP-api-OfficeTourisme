@@ -28,6 +28,23 @@ class CommentController extends Controller
             'data' => $comments,
         ]);
     }
+    public function indexComUser($id)
+    {
+        // On récupère tous les éléments de la table commentaire
+        $comments = DB::table('comments')
+            ->join('users', 'users.id', '=', 'comments.user_id')
+            ->join('items', 'items.id', '=', 'comments.item_id')
+            ->select('comments.id', 'comments.titleComment', 'comments.contentComment', 'comments.created_at', 'comments.updated_at', 'users.firstName as firstName', 'users.lastName as lastName', 'items.titleItem as titleItem')
+            ->where('users.id', '=', $id)
+            // ->distinct()
+            ->get()
+            ->toArray();
+        // On retourne les informations de la table commentaire en JSON
+        return response()->json([
+            'status' => 'Success',
+            'data' => $comments,
+        ]);
+    }
 
     /**
      * Store a newly created resource in storage.

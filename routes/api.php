@@ -85,8 +85,9 @@ Route::controller(CommentController::class)->group(function () {
     Route::get('comments', 'index');
     Route::post('comments', 'store')->middleware('auth:api');
     Route::get('comments/{comment}', 'show');
-    Route::post('comments/{comment}', 'update')->middleware('auth:api');
+    // Route::post('comments/{comment}', 'update')->middleware('auth:api');
     Route::delete('comments/{comment}', 'destroy')->middleware('auth:api');
+    Route::get('comments/user/{user}', 'indexComUser')->middleware('auth:api');
 });
 
 // Route::apiResource("contacts", ContactController::class);
