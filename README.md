@@ -8,5 +8,6 @@
         <li>middleware sur les routes</li>
         <li>Propriétée particulière - Affichage des commentaires de l'utilisateur</li>
         <li>Propriétée particulière - Affichage des sites par type</li>
+        <li> Seeders Fixture pour les users</li>
     </ul>
 </p>
